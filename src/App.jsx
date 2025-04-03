@@ -12,18 +12,20 @@ const App = () => {
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
 
+    const backend_URL = import.meta.env.VITE_BACKEND_URL;
+
     const sendMessage = async () => {
         if (!input.trim()) return;
 
         const newMessage = { text: input, sender: "user" };
-        const updatedMessages = [...messages, newMessage]; // Keep history
+        const updatedMessages = [...messages, newMessage];
 
         setMessages(updatedMessages);
         setInput("");
         setLoading(true);
 
         try {
-            const response = await axios.post(`http://localhost:3000/api/v1/llama/chat`, {
+            const response = await axios.post(`${backend_URL}`, {
                 messages: updatedMessages.map(msg => ({
                     role: msg.sender === "user" ? "user" : "assistant",
                     content: msg.text
